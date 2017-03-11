@@ -21,15 +21,27 @@ int main()
     
     //Y creo el spritesheet a partir de la imagen anterior
     sf::Sprite cabeza(tex);
-    int tamSprite = 32;
+    sf::Sprite piernas(tex);
+    int tamCabeza = 32;
+    int radioCabeza = tamCabeza/2;
+    int tamPiernas = 32;
+    int radioPiernas = (tamPiernas/2)-4;
+    
+    int escalCab = 2;
+    int escalPie = 4.5;
     //Le pongo el centroide donde corresponde
     
-    cabeza.setOrigin(tamSprite/2,tamSprite/2);
+    cabeza.setOrigin(tamCabeza/2,tamCabeza/2);
+    piernas.setOrigin(tamPiernas/2,tamPiernas/2);
     //Cojo el sprite que me interesa por defecto del sheet
-    cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite, tamSprite));
-
+    cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
+    piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
     // Lo dispongo en el centro de la pantalla
     cabeza.setPosition(anchoPantalla/2, altoPantalla/2);
+    piernas.setPosition(anchoPantalla/2, altoPantalla/2+radioPiernas);
+    
+    cabeza.setScale(escalCab,escalCab);
+    piernas.setScale(escalPie,escalPie);
 
     
 
@@ -48,9 +60,10 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyReleased:
-                            cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
+                            piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
                             //Escala por defecto
-                            cabeza.setScale(1,1);
+                            cabeza.setScale(escalCab,escalCab);
                           
                 break;
                     
@@ -63,30 +76,46 @@ int main()
                         //Mapeo del cursor
                         
                         case sf::Keyboard::Right:
-                            cabeza.setTextureRect(sf::IntRect(2*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                             //Escala por defecto
-                            cabeza.setScale(1,1);
+                            cabeza.setScale(escalCab,escalCab);
                             cabeza.move(kVel,0);
+                            piernas.setTextureRect(sf::IntRect(3*tamPiernas,2*tamPiernas, tamPiernas, tamPiernas));
+                            piernas.move(kVel,0);
+                            piernas.setScale(escalPie,escalPie);
                         break;
 
                         case sf::Keyboard::Left:
-                            cabeza.setTextureRect(sf::IntRect(2*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                             //Reflejo vertical
-                            cabeza.setScale(-1,1);
+                            cabeza.setScale(-escalCab,escalCab);
                             cabeza.move(-kVel,0); 
+                            piernas.setTextureRect(sf::IntRect(3*tamPiernas,2*tamPiernas, tamPiernas, tamPiernas));
+                            piernas.setScale(-escalPie,escalPie);
+                            piernas.move(-kVel,0);
+                            
+                            
+                            
                         break;
                         
                         case sf::Keyboard::Up:
-                            cabeza.setTextureRect(sf::IntRect(5*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                             cabeza.move(0,-kVel); 
+                            
+                            piernas.setTextureRect(sf::IntRect(1*tamPiernas,1*tamPiernas, tamPiernas, tamPiernas));
+                            piernas.move(0,-kVel);
+                            piernas.setScale(-escalPie,escalPie);
                         break;
                         
                         case sf::Keyboard::Down:
-                            cabeza.setTextureRect(sf::IntRect(1*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.setTextureRect(sf::IntRect(1*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                             cabeza.move(0,kVel); 
+                            piernas.setTextureRect(sf::IntRect(1*tamPiernas,1*tamPiernas, tamPiernas, tamPiernas));
+                            piernas.move(0,kVel);
+                            piernas.setScale(escalPie,escalPie);
                         break;
                         
-                        
+                 
                         //Tecla ESC para salir
                         case sf::Keyboard::Escape:
                             window.close();
@@ -102,9 +131,10 @@ int main()
             }
             
         }
-
         window.clear();
+        window.draw(piernas);
         window.draw(cabeza);
+        
         window.display();
     }
 
