@@ -5,28 +5,31 @@
 
 int main()
 {
+    int altoPantalla = 540;
+    int anchoPantalla = 900;
+    
     //Creamos una ventana 
-    sf::RenderWindow window(sf::VideoMode(900, 540), "P0. Fundamentos de los Videojuegos. DCCIA");
+    sf::RenderWindow window(sf::VideoMode(anchoPantalla, altoPantalla), "Hito 1: animacion personaje");
 
     //Cargo la imagen donde reside la textura del sprite
     sf::Texture tex;
-    if (!tex.loadFromFile("resources/sprites.png"))
+    if (!tex.loadFromFile("resources/isaacAzul.png"))
     {
         std::cerr << "Error cargando la imagen sprites.png";
         exit(0);
     }
     
     //Y creo el spritesheet a partir de la imagen anterior
-    sf::Sprite sprite(tex);
-    
+    sf::Sprite cabeza(tex);
+    int tamSprite = 34;
     //Le pongo el centroide donde corresponde
-    sprite.setOrigin(75/2,75/2);
-    //Cojo el sprite que me interesa por defecto del sheet
-    sprite.setTextureRect(sf::IntRect(0*75, 0*75, 75, 75));
-
     
+    cabeza.setOrigin(tamSprite/2,tamSprite/2);
+    //Cojo el sprite que me interesa por defecto del sheet
+    cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite-2, tamSprite));
+
     // Lo dispongo en el centro de la pantalla
-    sprite.setPosition(320, 240);
+    cabeza.setPosition(anchoPantalla/2, altoPantalla/2);
 
     
 
@@ -44,6 +47,12 @@ int main()
                 case sf::Event::Closed:
                     window.close();
                     break;
+                case sf::Event::KeyReleased:
+                            cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            //Escala por defecto
+                            cabeza.setScale(1,1);
+                          
+                break;
                     
                 //Se pulsó una tecla, imprimo su codigo
                 case sf::Event::KeyPressed:
@@ -52,28 +61,29 @@ int main()
                     switch(event.key.code) {
                         
                         //Mapeo del cursor
+                        
                         case sf::Keyboard::Right:
-                            sprite.setTextureRect(sf::IntRect(0*75, 2*75, 75, 75));
+                            cabeza.setTextureRect(sf::IntRect(2*tamSprite, 0*tamSprite, tamSprite, tamSprite));
                             //Escala por defecto
-                            sprite.setScale(1,1);
-                            sprite.move(kVel,0);
+                            cabeza.setScale(1,1);
+                            cabeza.move(kVel,0);
                         break;
 
                         case sf::Keyboard::Left:
-                            sprite.setTextureRect(sf::IntRect(0*75, 2*75, 75, 75));
+                            cabeza.setTextureRect(sf::IntRect(2*tamSprite, 0*tamSprite, tamSprite, tamSprite));
                             //Reflejo vertical
-                            sprite.setScale(-1,1);
-                            sprite.move(-kVel,0); 
+                            cabeza.setScale(-1,1);
+                            cabeza.move(-kVel,0); 
                         break;
                         
                         case sf::Keyboard::Up:
-                            sprite.setTextureRect(sf::IntRect(0*75, 3*75, 75, 75));
-                            sprite.move(0,-kVel); 
+                            cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.move(0,-kVel); 
                         break;
                         
                         case sf::Keyboard::Down:
-                            sprite.setTextureRect(sf::IntRect(0*75, 0*75, 75, 75));
-                            sprite.move(0,kVel); 
+                            cabeza.setTextureRect(sf::IntRect(1*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.move(0,kVel); 
                         break;
                         
                         
@@ -94,7 +104,7 @@ int main()
         }
 
         window.clear();
-        window.draw(sprite);
+        window.draw(cabeza);
         window.display();
     }
 
