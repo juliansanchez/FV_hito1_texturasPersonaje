@@ -21,12 +21,12 @@ int main()
     
     //Y creo el spritesheet a partir de la imagen anterior
     sf::Sprite cabeza(tex);
-    int tamSprite = 34;
+    int tamSprite = 32;
     //Le pongo el centroide donde corresponde
     
     cabeza.setOrigin(tamSprite/2,tamSprite/2);
     //Cojo el sprite que me interesa por defecto del sheet
-    cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite-2, tamSprite));
+    cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite, tamSprite));
 
     // Lo dispongo en el centro de la pantalla
     cabeza.setPosition(anchoPantalla/2, altoPantalla/2);
@@ -77,7 +77,7 @@ int main()
                         break;
                         
                         case sf::Keyboard::Up:
-                            cabeza.setTextureRect(sf::IntRect(0*tamSprite, 0*tamSprite, tamSprite, tamSprite));
+                            cabeza.setTextureRect(sf::IntRect(5*tamSprite, 0*tamSprite, tamSprite, tamSprite));
                             cabeza.move(0,-kVel); 
                         break;
                         
