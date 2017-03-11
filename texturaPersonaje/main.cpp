@@ -25,7 +25,7 @@ int main()
     int tamCabeza = 32;
     int radioCabeza = tamCabeza/2;
     int tamPiernas = 32;
-    int radioPiernas = (tamPiernas/2)+4;
+    int radioPiernas = (tamPiernas/2)+4; // modificar +4 si se cambia la escala
     
     int escalCab = 2;
     int escalPie = 4.5;
