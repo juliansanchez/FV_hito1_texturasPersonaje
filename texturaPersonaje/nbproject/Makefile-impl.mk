@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Practica0_cuervo
+PROJECTNAME=texturaPersonaje
 
 # Active Configuration
 DEFAULTCONF=Debug
