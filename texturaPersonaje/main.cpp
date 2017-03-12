@@ -12,52 +12,44 @@
 #include <math.h>
 
 // Sprite speed (high values = high speed)
-#define SPRITE_SPEED  2
+#define SPRITE_SPEED  1
 
 int main()
 {
     // _____________________
-    // ::: Create window :::
+    // ::: VENTANA PRINCIPAL :::
 
     int altoPantalla = 540;
     int anchoPantalla = 900;
-    
     //Creamos una ventana 
     sf::RenderWindow window(sf::VideoMode(anchoPantalla, altoPantalla), "Hito 1: animacion personaje");
-
     // Enable vertical sync. (vsync)
     window.setVerticalSyncEnabled (true);
     // When a key is pressed, sf::Event::KeyPressed will be true only once
     window.setKeyRepeatEnabled(false);
 
-
-    // ____________________
-    // ::: Load texture :::
-
-    // Create texture from PNG file
+    // ::: Creamos y cargamos las texturas :::
     sf::Texture texture;
     if (!texture.loadFromFile("resources/isaacAzul.png"))
     {
         std::cerr << "Error while loading texture" << std::endl;
         return -1;
     }
-    // Enable the smooth filter. The texture appears smoother so that pixels are less noticeable.
+    // Filtro SMOOTH
     // texture.setSmooth(true);
 
-    // ::: Create sprite and apply texture :::
-
-  
-        //Y creo el spritesheet a partir de la imagen anterior
+    //Y creo el spritesheet a partir de la imagen anterior
     sf::Sprite cabeza(texture);
     sf::Sprite piernas(texture);
     int tamCabeza = 32;
     int radioCabeza = tamCabeza/2;
     int tamPiernas = 32;
-    int radioPiernas = (tamPiernas/2)-4; // modificar +4 si se cambia la escala
+    int radioPiernas = (tamPiernas/2); // modificar +4 si se cambia la escala
     // para cambiar el tamaño de los sprites
-    int escalCab = 1;
-    int escalPie = 1.5;
-       //Le pongo el centroide donde corresponde
+    float escalCab = 1;
+    float escalPie = 1;
+    
+    //Le pongo el centroide donde corresponde
     cabeza.setOrigin(tamCabeza/2,tamCabeza/2);
     piernas.setOrigin(tamPiernas/2,tamPiernas/2);
     //Cojo el sprite que me interesa por defecto del sheet
@@ -84,23 +76,23 @@ int main()
     // ::: INICIO LOOP :::
     while (window.isOpen())
     {
-        // Process events
+        // Proceso de eventos
         sf::Event event;
         while (window.pollEvent(event))
         {
-            // Close the window if a key is pressed or if requested
+            // Cerrar ventana
             if (event.type == sf::Event::Closed) 
                 window.close();
 
-            // If a key is pressed
+            // Si pulsamos una tecla
             if (event.type == sf::Event::KeyPressed)
             {
                 switch (event.key.code)
                 {
-                // If escape is pressed, close the application
+                // Para cerrar la ventana con ESC
                 case  sf::Keyboard::Escape : window.close(); break;
 
-                // Process the up, down, left and right keys
+                // Teclas  up, down, left and right keys
                 case sf::Keyboard::W : // ARRIBA     
                     upFlag=true; 
                     cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
@@ -137,7 +129,7 @@ int main()
                 }
             }
 
-            // If a key is released
+            // Si no pulsamos ninguan tecla
             if (event.type == sf::Event::KeyReleased)
             {
                 // posicion del sprite cuando no se pulsa el teclado
@@ -162,7 +154,7 @@ int main()
             }
         }
 
-        // Update coordinates
+        // Actalizamos coordenadas
         if (leftFlag) x-=SPRITE_SPEED;
         if (rightFlag) x+=SPRITE_SPEED;
         if (upFlag) y-=SPRITE_SPEED;
@@ -178,16 +170,16 @@ int main()
         if (y>(int)window.getSize().y) 
             y=window.getSize().y-radioCabeza;
 
-        // Clear the window and apply grey background
+        // Limpiamos la ventana y aplicamos un color de fondo 
         window.clear( sf::Color(127,127,127));
 
-        // Rotate and draw the sprite
+        // Fijamos las posiciones de los sprites
         cabeza.setPosition(x,y);
         piernas.setPosition(x,y+12); // valor para ajustar cuerpo a cabeza
         window.draw(piernas);
         window.draw(cabeza);
 
-        // Update display and wait for vsync
+        // Actualizar mostrar por pantalla
         window.display();
     }
     return 0;
