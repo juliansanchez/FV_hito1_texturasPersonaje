@@ -137,9 +137,7 @@ int main()
                     cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
                     //Escala por defecto
-                    cabeza.setScale(escalCab,escalCab); 
-                    
-                    
+                    cabeza.setScale(escalCab,escalCab);             
                 }
                 
                 
