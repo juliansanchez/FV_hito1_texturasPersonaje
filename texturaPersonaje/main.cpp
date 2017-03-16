@@ -43,10 +43,11 @@ int main()
     int tamCabeza = 32;
     int radioCabeza = tamCabeza/2;
     int tamPiernas = 32;
-    int radioPiernas = (tamPiernas/2); // modificar +4 si se cambia la escala
+    int radioPiernas = tamPiernas/2; 
+    int ajustePierna = 12;
     // para cambiar el tamaño de los sprites
-    float escalCab = 1;
-    float escalPie = 1;
+    float escalCab = 1.5;
+    float escalPie = 1.5;
     
     //Le pongo el centroide donde corresponde
     cabeza.setOrigin(tamCabeza/2,tamCabeza/2);
@@ -60,7 +61,6 @@ int main()
     // tamaño de los esprites
     cabeza.setScale(escalCab,escalCab);
     piernas.setScale(escalPie,escalPie);
-
 
     // Coordenadas para los sprites
     int x=window.getSize().x/2.;
@@ -131,11 +131,18 @@ int main()
             // Si no pulsamos ninguan tecla
             if (event.type == sf::Event::KeyReleased)
             {
-                // posicion del sprite cuando no se pulsa el teclado
-                cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
-                piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
-                //Escala por defecto
-                cabeza.setScale(escalCab,escalCab);
+                // solu provisional. Falta controlar cuando son dos teclas pulsadas
+                if(upFlag==false || downFlag==false || leftFlag==false || rightFlag==false){
+                    
+                    cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
+                    piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
+                    //Escala por defecto
+                    cabeza.setScale(escalCab,escalCab); 
+                    
+                    
+                }
+                
+                
                 
                 switch (event.key.code)
                 {
@@ -149,6 +156,7 @@ int main()
                 case sf::Keyboard::D:  // DERECHA
                     rightFlag=false; break;
                 default : break;
+                
                 }
             }
         }
@@ -174,7 +182,7 @@ int main()
 
         // Fijamos las posiciones de los sprites
         cabeza.setPosition(x,y);
-        piernas.setPosition(x,y+12); // valor para ajustar cuerpo a cabeza
+        piernas.setPosition(x,y+(ajustePierna)*escalPie); // valor para ajustar cuerpo a cabeza
         window.draw(piernas);
         window.draw(cabeza);
 
