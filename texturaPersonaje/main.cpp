@@ -11,7 +11,6 @@
 
 // Sprite speed (high values = high speed)
 #define SPRITE_SPEED  1
-#define BALL_SPEED  5
 
 int main()
 {
@@ -37,13 +36,7 @@ int main()
         return -1;
     }
     
-    sf::Texture textureBala;
-    if (!textureBala.loadFromFile("resources/bala.png"))
-    {
-        std::cerr << "Error while loading texture BALA" << std::endl;
-        return -1;
-    }
-    
+        
     int tamCabeza = 32;
     int radioCabeza = tamCabeza/2;
     int tamPiernas = 32;
@@ -53,7 +46,6 @@ int main()
     float escalCab = 1.5;
     float escalPie = 1.5;
     
-    int xincremento = 4, yincremento = 4;
     
     //Y creo el spritesheet a partir de la imagen anterior
     sf:: IntRect rectSpriteCabeza (0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza);
@@ -61,13 +53,6 @@ int main()
     
     sf::Sprite cabeza(texture);
     sf::Sprite piernas(texture);
-    sf::Sprite bala(textureBala);
-    
-    bala.setTextureRect(sf::IntRect(16, 16, 32, 32));
-    bala.setOrigin(32/2,32/2);
-    bala.setPosition(100, altoPantalla+35/2);
-    bala.setScale(0.5,0.5);
-    
     
     //Le pongo el centroide donde corresponde
     cabeza.setOrigin(tamCabeza/2,tamCabeza/2);
@@ -169,27 +154,8 @@ int main()
                 }
             }
             
-            /* DISPARO */
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){// Dispara ARRIBA
-                bala.move(0,-yincremento);
-
-            }
-            /* DISPARO */
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){// Dispara ABAJO
-                bala.move(0,yincremento);
-
-            }
-            /* DISPARO */
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){// Dispara DCHA
-                bala.move(xincremento,0);
-
-            }
-            /* DISPARO */
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){// Dispara IZDA
-                bala.move(-xincremento,0);
-
-            }
-
+            
+            
             // Si no pulsamos ninguan tecla
             if (event.type == sf::Event::KeyReleased)
             {
@@ -244,14 +210,10 @@ int main()
         // Fijamos las posiciones de los sprites
         cabeza.setPosition(x,y);
         piernas.setPosition(x,y+(ajustePierna)*escalPie); // valor para ajustar cuerpo a cabeza
-        
-        window.draw(bala);
-       
+             
         window.draw(piernas);
         window.draw(cabeza);
-        
-        
-
+    
         // Actualizar mostrar por pantalla
         window.display();
     }
