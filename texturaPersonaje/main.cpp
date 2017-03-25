@@ -174,6 +174,21 @@ int main()
                 bala.move(0,-yincremento);
 
             }
+            /* DISPARO */
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){// Dispara ABAJO
+                bala.move(0,yincremento);
+
+            }
+            /* DISPARO */
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){// Dispara DCHA
+                bala.move(xincremento,0);
+
+            }
+            /* DISPARO */
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){// Dispara IZDA
+                bala.move(-xincremento,0);
+
+            }
 
             // Si no pulsamos ninguan tecla
             if (event.type == sf::Event::KeyReleased)
