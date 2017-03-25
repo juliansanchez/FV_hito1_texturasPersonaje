@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Bala.o \
 	${OBJECTDIR}/main.o
 
 
@@ -67,6 +68,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/texturapersonaje: /usr/lib/x86_64-lin
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/texturapersonaje: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/texturapersonaje ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Bala.o: Bala.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Bala.o Bala.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

@@ -8,13 +8,13 @@
 // SFML libraries
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Bala.h"
 
 // Sprite speed (high values = high speed)
 #define SPRITE_SPEED  1
 
 int main()
 {
-
     // ::: VENTANA PRINCIPAL :::
     // variable para animar los FRAMES de piernas
     int contadorPasos = 0;
@@ -30,11 +30,21 @@ int main()
 
     // ::: Creamos y cargamos las texturas :::
     sf::Texture texture;
+    
     if (!texture.loadFromFile("resources/isaacAzul.png"))
     {
         std::cerr << "Error while loading texture ISAAC" << std::endl;
         return -1;
     }
+    
+    int x=window.getSize().x/2;
+    int y=window.getSize().y/2;
+    
+    Bala *bala1 = new Bala(x+20,y,1,0);
+    printf("%d\n",bala1->getX());
+    
+    
+    
     
         
     int tamCabeza = 32;
@@ -45,6 +55,7 @@ int main()
     // para cambiar el tamaño de los sprites
     float escalCab = 1;
     float escalPie = 1;
+    // Coordenadas para los sprites
     
     
     //Y creo el spritesheet a partir de la imagen anterior
@@ -67,9 +78,7 @@ int main()
     cabeza.setScale(escalCab,escalCab);
     piernas.setScale(escalPie,escalPie);
 
-    // Coordenadas para los sprites
-    int x=window.getSize().x/2.;
-    int y=window.getSize().y/2.;
+    
 
     // avisadores de tecla pulsada
     bool upFlag=false;
