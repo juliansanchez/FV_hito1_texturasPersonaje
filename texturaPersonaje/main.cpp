@@ -43,8 +43,8 @@ int main()
     int radioPiernas = tamPiernas/2; 
     int ajustePierna = 12;
     // para cambiar el tamaño de los sprites
-    float escalCab = 1.5;
-    float escalPie = 1.5;
+    float escalCab = 1;
+    float escalPie = 1;
     
     
     //Y creo el spritesheet a partir de la imagen anterior
