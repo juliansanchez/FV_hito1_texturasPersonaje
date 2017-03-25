@@ -41,4 +41,3 @@ private:
 };
 
 #endif /* BALA_H */
-
