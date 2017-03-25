@@ -11,10 +11,9 @@
 #include "Bala.h"
 #include <vector>
 // Sprite speed (high values = high speed)
-#define SPRITE_SPEED  1
+#define SPRITE_SPEED  2
 using namespace std;
 // control direccion de disparo
-
 enum{
     Arriba = 0,
     Abajo  = 1,
@@ -24,13 +23,14 @@ enum{
 
 int main()
 {
-    // ::: VENTANA PRINCIPAL :::
+    
+    
     // variable para animar los FRAMES de piernas
     int contadorPasos = 0;
-    
     int altoPantalla = 540;
     int anchoPantalla = 900;
-    //Creamos una ventana 
+    
+    // ::: VENTANA PRINCIPAL :::
     sf::RenderWindow window(sf::VideoMode(anchoPantalla, altoPantalla), "Hito 1: animacion personaje");
     // Enable vertical sync. (vsync)
     window.setVerticalSyncEnabled (true);
@@ -47,20 +47,25 @@ int main()
         return -1;
     }
     
+    // variables de posicion XY
     int x=window.getSize().x/2;
     int y=window.getSize().y/2;
     
+    // vector de balas 
     std::vector<Bala*> balas;
     // velocidad de bala
     int velx = 0;
     int vely = 0;
+    // distancia a la dispara 
     float rangoDisparo = 1.5;  
     
+    // centinela para conocer direccion de disparo
     int dispara = 0;
     // control direccion de disparo
     int direccionDisparo=Decha;
     
         
+    // variable tamaño sprites personaje
     int tamCabeza = 32;
     int radioCabeza = tamCabeza/2;
     int tamPiernas = 32;
@@ -70,10 +75,8 @@ int main()
     float escalCab = 1;
     float escalPie = 1;
         
-    //Y creo el spritesheet a partir de la imagen anterior
-    sf:: IntRect rectSpriteCabeza (0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza);
-    sf:: IntRect rectSpritePiernas (0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas);
     
+    //SPRITE JUGADOR   
     sf::Sprite cabeza(texture);
     sf::Sprite piernas(texture);
     
@@ -81,8 +84,8 @@ int main()
     cabeza.setOrigin(tamCabeza/2,tamCabeza/2);
     piernas.setOrigin(tamPiernas/2,tamPiernas/2);
     //Cojo el sprite que me interesa por defecto del sheet
-    cabeza.setTextureRect(rectSpriteCabeza);
-    piernas.setTextureRect(rectSpritePiernas);
+    cabeza.setTextureRect(sf:: IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
+    piernas.setTextureRect(sf:: IntRect (0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
     // Lo dispongo en el centro de la pantalla
     cabeza.setPosition(anchoPantalla/2, altoPantalla/2);
     piernas.setPosition(anchoPantalla/2, altoPantalla/2+radioPiernas);
@@ -90,15 +93,15 @@ int main()
     cabeza.setScale(escalCab,escalCab);
     piernas.setScale(escalPie,escalPie);
 
-   
-    // avisadores de tecla pulsada
+    // avisadores de tecla pulsada MOV Jugador
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
     
-    sf::Clock reloj;
-    sf::Clock relojSprite;
+    sf::Clock reloj; // reloj para el disparo 
+    sf::Clock relojSprite; // para la animacion PIERNAS personaje
+    // reinicio el reloj en cada iteracion
     reloj.restart();
     relojSprite.restart();
 
@@ -106,17 +109,22 @@ int main()
     // ::: INICIO LOOP :::
     while (window.isOpen())
     {
+        // considicion
         if(dispara !=0 ){
             int velx = 0;
             int vely = 0;
+            // variables para disparo diagonal 
             if (leftFlag) velx = -3;
             else if(rightFlag) velx = 3;
             if (upFlag) vely = -3;
             else if(downFlag) vely = 3;
+            // comprobamos direccion de disparo y cargamos posicion de textura
             switch (direccionDisparo){
                 case Arriba:
                     cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
+                    // separacion entre bolas en el disparo
                     if(reloj.getElapsedTime().asSeconds() > 0.3){
+                        // creamos una nueva bala y la metemos en el vector
                         balas.push_back(new Bala(x,y,velx,-3,rangoDisparo));
                         reloj.restart();
                     }
@@ -148,6 +156,7 @@ int main()
                 break;
             }
         }else{
+            // posicion de las texturas Personaje segun movimiento
             if(upFlag == true){
                 cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
             }
@@ -165,16 +174,20 @@ int main()
                 cabeza.setScale(escalCab,escalCab);                 
                
             }
+            // posicion del personaje NEUTRA
             else{
                 cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza)); 
             }
         }
         
-        if(relojSprite.getElapsedTime().asSeconds()> .1 && (upFlag==true || downFlag==true || leftFlag==true || rightFlag==true)){
+        // animacion de los PASOS del PERSONAJE
+        if(relojSprite.getElapsedTime().asSeconds()> .1 && (upFlag==true || downFlag==true 
+                || leftFlag==true || rightFlag==true)){
             contadorPasos++;
             if(contadorPasos == 8){
                 contadorPasos = 0;
             }
+            // control de la posicion 
             if(upFlag == true){
                 piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,1*tamPiernas, tamPiernas, tamPiernas));
                 piernas.setScale(-escalPie,escalPie);
@@ -205,7 +218,6 @@ int main()
             // Si pulsamos una tecla
             if (event.type == sf::Event::KeyPressed)
             {
-                
                 switch (event.key.code)
                 {
                 // Para cerrar la ventana con ESC
@@ -214,31 +226,23 @@ int main()
                 // MOV del personaje
                 case sf::Keyboard::W : // ARRIBA     
                     upFlag=true; 
-                    //cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     break;
                     
                 case sf::Keyboard::S:// ABAJO
                     downFlag=true;
-                    //cabeza.setTextureRect(sf::IntRect(1*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     break;
                 break;
                 
                 case sf::Keyboard::A: // IZDA   
                     leftFlag=true; 
-                    //cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
-                    //Reflejo vertical
-                    //cabeza.setScale(-escalCab,escalCab);
                 break;
                             
                 case sf::Keyboard::D: // DERECHA
-                    rightFlag=true; 
-                    //cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
-                    //Escala por defecto
-                    //cabeza.setScale(escalCab,escalCab);                 
+                    rightFlag=true;                  
                 break;
                 
                 
-                /* DISPAROS */
+                /* DISPAROS. Condicion de direccion de disparo */
                 case sf::Keyboard::Up: // Arriba
                     direccionDisparo=Arriba;
                     dispara++; 
@@ -258,15 +262,13 @@ int main()
                 default : break;
                 }
             }
-            
-            
-            
+              
             // Si no pulsamos ninguan tecla
             if (event.type == sf::Event::KeyReleased)
             {
                 switch (event.key.code)
                 {
-                // Process the up, down, left and right keys
+                // Liberamos teclas
                 case sf::Keyboard::W : // ARRIBA     
                     upFlag=false;break;                    
                 case sf::Keyboard::S:  // ABAJO  
@@ -288,9 +290,9 @@ int main()
                 default : break;
                 
                 }
-                
             }
-            
+
+            // posicion NEUTRA PERSONAJE
             if(upFlag==false && downFlag==false && leftFlag==false && rightFlag==false){
                 cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                 piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
@@ -298,7 +300,6 @@ int main()
                 cabeza.setScale(escalCab,escalCab);             
             }
         }
-        
 
         // Actalizamos coordenadas
         if (leftFlag) x-=SPRITE_SPEED;
@@ -319,12 +320,11 @@ int main()
         // actualizo posicion de la bala
         for(int i = 0 ; i<balas.size(); i++){
             if(balas.at(i)){
-                balas.at(i)->actualiza();
+                balas.at(i)->actualiza(); // actualizo posicion de la bala
                 if(balas.at(i)->destruirBala){
-                    delete balas.at(i);
-                    balas.erase(balas.begin()+i);
-                }
-                    
+                    delete balas.at(i); // borramos la bala del vector
+                    balas.erase(balas.begin()+i); // libero memoria de pos del vector
+                }        
             }
         }
         
