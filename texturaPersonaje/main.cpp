@@ -159,15 +159,21 @@ int main()
                 break;
                 /* DISPAROS */
                 case sf::Keyboard::Up: // Arriba
+                    cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     balas.push_back(new Bala(x,y,0,-1)); 
                 break;
                 case sf::Keyboard::Down: // Abajo
+                    cabeza.setTextureRect(sf::IntRect(1*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     balas.push_back(new Bala(x,y,0,1)); 
                  break;
                 case sf::Keyboard::Left: // Letf
+                    cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
+                    //Reflejo vertical
+                    cabeza.setScale(-escalCab,escalCab);
                     balas.push_back(new Bala(x,y,-2,0)); 
                 break;
                 case sf::Keyboard::Right: // Arriba
+                    cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));                  
                     balas.push_back(new Bala(x,y,2,0)); 
                 break;                    
                 default : break;
