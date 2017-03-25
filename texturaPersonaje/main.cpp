@@ -9,7 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Bala.h"
-
+#include <vector>
 // Sprite speed (high values = high speed)
 #define SPRITE_SPEED  1
 
@@ -25,6 +25,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(anchoPantalla, altoPantalla), "Hito 1: animacion personaje");
     // Enable vertical sync. (vsync)
     window.setVerticalSyncEnabled (true);
+    window.setFramerateLimit(60);
     // When a key is pressed, sf::Event::KeyPressed will be true only once
     // window.setKeyRepeatEnabled(false);
 
@@ -40,8 +41,7 @@ int main()
     int x=window.getSize().x/2;
     int y=window.getSize().y/2;
     
-    Bala *bala1 = new Bala(x+20,y,1,0);
-    printf("%d\n",bala1->getX());
+    std::vector<Bala*> balas;
     
     
     
@@ -156,9 +156,20 @@ int main()
                     if(contadorPasos == 8){
                         contadorPasos = 0;
                     }                    
-                    break;
-                    
-                     
+                break;
+                /* DISPAROS */
+                case sf::Keyboard::Up: // Arriba
+                    balas.push_back(new Bala(x,y,0,-1)); 
+                break;
+                case sf::Keyboard::Down: // Abajo
+                    balas.push_back(new Bala(x,y,0,1)); 
+                 break;
+                case sf::Keyboard::Left: // Letf
+                    balas.push_back(new Bala(x,y,-2,0)); 
+                break;
+                case sf::Keyboard::Right: // Arriba
+                    balas.push_back(new Bala(x,y,2,0)); 
+                break;                    
                 default : break;
                 }
             }
@@ -212,6 +223,16 @@ int main()
         if (y>(int)window.getSize().y) 
             y=window.getSize().y-radioCabeza;
 
+        for(int i = 0 ; i<balas.size(); i++){
+            if(balas.at(i)){
+                balas.at(i)->actualiza();
+                if(balas.at(i)->destruirBala){
+                    delete balas.at(i);
+                    balas.erase(balas.begin()+i);
+                }
+                    
+            }
+        }
         
         // Limpiamos la ventana y aplicamos un color de fondo 
         window.clear( sf::Color(127,127,127));
@@ -219,8 +240,14 @@ int main()
         // Fijamos las posiciones de los sprites
         cabeza.setPosition(x,y);
         piernas.setPosition(x,y+(ajustePierna)*escalPie); // valor para ajustar cuerpo a cabeza
-             
+          
+        for(int i = 0 ; i<balas.size(); i++){
+            if(balas.at(i)){
+                window.draw(*balas.at(i));
+            }
+        }
         window.draw(piernas);
+
         window.draw(cabeza);
     
         // Actualizar mostrar por pantalla

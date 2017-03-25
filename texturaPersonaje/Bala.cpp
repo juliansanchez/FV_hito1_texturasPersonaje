@@ -10,36 +10,48 @@
  * 
  * Created on 25 de marzo de 2017, 11:47
  */
-
-#include <stdio.h>
 #include "Bala.h"
 
+#include <stdio.h>
+#include <iostream>
 
-Bala::Bala(int x,int y) {
+
+
+Bala::Bala(int x,int y,int velx, int vely) {
     posx = x;
     posy = y; 
+    this->velx=velx;
+    this->vely=vely;
+    destruirBala = false;
+    clock.restart();
+    
     if(!textura.loadFromFile("resources/bala.png")){
         std::cerr << "Error while loading texture ISAAC" << std::endl;
-        return -1;
+        return;
     };
     
-    sprite.setTextureRect(textura);
+    sprite = sf::Sprite(textura);
     sprite.setTextureRect(sf::IntRect(16, 16, 32, 32));
-    
-    
-
+    sprite.setScale(0.5,0.5);
 }
 
-Bala::~Bala() {
-}
+Bala::~Bala() {}
 
-void Bala::setPosicion(int x, int y){
-         
-}
+void Bala::setPosicion(int x, int y){       }
+void Bala::colisionar(){       }
 
 void Bala::actualiza(){
     posx+=velx;
     posy+=vely;
+    
+        
+    if(clock.getElapsedTime().asSeconds()< 3){
+        sprite.setPosition(posx,posy);
+    }
+    else
+        destruirBala = true;
+        
+    
 }
 int Bala::getX(){
     return posx;
@@ -48,7 +60,6 @@ int Bala::getX(){
 int Bala::getY(){
     return posy;
 }
-virtual void Bala::draw(sf::RenderTarget& sf::RenderStates states)const{
-    target.draw(*sprite,states);
-    
+void Bala::draw(sf::RenderTarget& target, sf::RenderStates states)const{
+    target.draw(sprite,states); 
 }

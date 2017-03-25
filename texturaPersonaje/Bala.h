@@ -17,18 +17,20 @@
 
 class Bala:public sf::Drawable {
 public:
-    Bala(int x,int y);
+    Bala(int x,int y,int velx, int vely);
     Bala(const Bala& orig);
-    virtual ~Bala();
+    ~Bala();
     
-    void disparar();
     void colisionar();
-    void setPosicion();
+    void setPosicion(int x, int y);
     void actualiza();
     int getX();
     int getY();
+    bool destruirBala = false;
+    
         
 private:
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
     int posx;
     int posy;
     int velx;
@@ -36,8 +38,10 @@ private:
     float velocidad = 3.0;
     sf::Texture textura;
     sf::Sprite sprite;
+    sf::Clock clock; // controlar vida de la bala
+
     
-    virtual void draw(sf::RenderTarget& sf::RenderStates states)const;
+    //virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
 };
 
 #endif /* BALA_H */
