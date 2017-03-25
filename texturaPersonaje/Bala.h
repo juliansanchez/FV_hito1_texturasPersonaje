@@ -17,7 +17,7 @@
 
 class Bala:public sf::Drawable {
 public:
-    Bala(int x,int y,int velx, int vely);
+    Bala(int x,int y,int velx, int vely, float rangoDisparo);
     Bala(const Bala& orig);
     ~Bala();
     
@@ -35,13 +35,11 @@ private:
     int posy;
     int velx;
     int vely;
-    float velocidad = 3.0;
+    float rangoDisparo;
+    
     sf::Texture textura;
     sf::Sprite sprite;
     sf::Clock clock; // controlar vida de la bala
-
-    
-    //virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
 };
 
 #endif /* BALA_H */

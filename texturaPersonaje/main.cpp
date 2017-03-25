@@ -12,7 +12,7 @@
 #include <vector>
 // Sprite speed (high values = high speed)
 #define SPRITE_SPEED  1
-
+using namespace std;
 int main()
 {
     // ::: VENTANA PRINCIPAL :::
@@ -27,7 +27,7 @@ int main()
     window.setVerticalSyncEnabled (true);
     window.setFramerateLimit(60);
     // When a key is pressed, sf::Event::KeyPressed will be true only once
-    // window.setKeyRepeatEnabled(false);
+    window.setKeyRepeatEnabled(false);
 
     // ::: Creamos y cargamos las texturas :::
     sf::Texture texture;
@@ -42,10 +42,12 @@ int main()
     int y=window.getSize().y/2;
     
     std::vector<Bala*> balas;
+    // velocidad de bala
+    int velx = 0;
+    int vely = 0;
+    float rangoDisparo = 1.5;  
     
-    
-    
-    
+    bool dispara = false;
         
     int tamCabeza = 32;
     int radioCabeza = tamCabeza/2;
@@ -55,9 +57,7 @@ int main()
     // para cambiar el tamaño de los sprites
     float escalCab = 1;
     float escalPie = 1;
-    // Coordenadas para los sprites
-    
-    
+        
     //Y creo el spritesheet a partir de la imagen anterior
     sf:: IntRect rectSpriteCabeza (0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza);
     sf:: IntRect rectSpritePiernas (0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas);
@@ -78,17 +78,47 @@ int main()
     cabeza.setScale(escalCab,escalCab);
     piernas.setScale(escalPie,escalPie);
 
-    
-
+   
     // avisadores de tecla pulsada
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
     
+    sf::Clock reloj;
+    sf::Clock relojSprite;
+    reloj.restart();
+    relojSprite.restart();
+
+    
     // ::: INICIO LOOP :::
     while (window.isOpen())
     {
+        if(relojSprite.getElapsedTime().asSeconds()> .1 && (upFlag==true || downFlag==true || leftFlag==true || rightFlag==true)){
+            contadorPasos++;
+            if(contadorPasos == 8){
+                contadorPasos = 0;
+            }
+            if(upFlag == true){
+                piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,1*tamPiernas, tamPiernas, tamPiernas));
+                piernas.setScale(-escalPie,escalPie);
+            }
+            if(downFlag == true){
+                piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,1*tamPiernas, tamPiernas, tamPiernas));
+                piernas.setScale(escalPie,escalPie);
+            }
+            if(leftFlag==true){
+                piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,2*tamPiernas, tamPiernas, tamPiernas));
+                piernas.setScale(-escalPie,escalPie);
+            }
+            if(rightFlag==true){
+                piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,2*tamPiernas, tamPiernas, tamPiernas));
+                piernas.setScale(escalPie,escalPie);
+            }
+            
+            
+            relojSprite.restart();
+        }
         // Proceso de eventos
         sf::Event event;
         while (window.pollEvent(event))
@@ -100,34 +130,22 @@ int main()
             // Si pulsamos una tecla
             if (event.type == sf::Event::KeyPressed)
             {
+                
                 switch (event.key.code)
                 {
                 // Para cerrar la ventana con ESC
                 case  sf::Keyboard::Escape : window.close(); break;
 
-                // Teclas  up, down, left and right keys
+                // MOV del personaje
                 case sf::Keyboard::W : // ARRIBA     
                     upFlag=true; 
                     cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
-                    piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,1*tamPiernas, tamPiernas, tamPiernas));
-                    piernas.setScale(-escalPie,escalPie);
-                    
-                    contadorPasos++;
-                    if(contadorPasos == 8){
-                        contadorPasos = 0;
-                    }
                     break;
                     
                 case sf::Keyboard::S:// ABAJO
                     downFlag=true;
                     cabeza.setTextureRect(sf::IntRect(1*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));     
-                    piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,1*tamPiernas, tamPiernas, tamPiernas));
-                    piernas.setScale(escalPie,escalPie);
-                    
-                    contadorPasos++;
-                    if(contadorPasos == 8){
-                        contadorPasos = 0;
-                    }
+
                     break;
                     
                 case sf::Keyboard::A: // IZDA   
@@ -135,13 +153,9 @@ int main()
                     cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     //Reflejo vertical
                     cabeza.setScale(-escalCab,escalCab);
-                    piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,2*tamPiernas, tamPiernas, tamPiernas));
-                    piernas.setScale(-escalPie,escalPie);
                     
-                    contadorPasos++;
-                    if(contadorPasos == 8){
-                        contadorPasos = 0;
-                    }
+                    
+                   
                     break;
                             
                 case sf::Keyboard::D: // DERECHA
@@ -149,32 +163,46 @@ int main()
                     cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     //Escala por defecto
                     cabeza.setScale(escalCab,escalCab);
-                    piernas.setTextureRect(sf::IntRect(contadorPasos*tamPiernas,2*tamPiernas, tamPiernas, tamPiernas));
-                    piernas.setScale(escalPie,escalPie);
                     
-                    contadorPasos++;
-                    if(contadorPasos == 8){
-                        contadorPasos = 0;
-                    }                    
+                    
+                                       
                 break;
+                
+                
                 /* DISPAROS */
                 case sf::Keyboard::Up: // Arriba
                     cabeza.setTextureRect(sf::IntRect(5*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
-                    balas.push_back(new Bala(x,y,0,-1)); 
+                     
+                    if(reloj.getElapsedTime().asSeconds() > 0.3){
+                        balas.push_back(new Bala(x,y,0,-3,rangoDisparo));
+                        reloj.restart();
+                    }
                 break;
                 case sf::Keyboard::Down: // Abajo
                     cabeza.setTextureRect(sf::IntRect(1*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
-                    balas.push_back(new Bala(x,y,0,1)); 
+                   
+                    if(reloj.getElapsedTime().asSeconds() > 0.3){
+                         balas.push_back(new Bala(x,y,0,3,rangoDisparo));
+                         reloj.restart();
+                    }
                  break;
                 case sf::Keyboard::Left: // Letf
                     cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
                     //Reflejo vertical
                     cabeza.setScale(-escalCab,escalCab);
-                    balas.push_back(new Bala(x,y,-2,0)); 
+                    
+                    if(reloj.getElapsedTime().asSeconds() > 0.3){
+                        balas.push_back(new Bala(x,y,-3,0,rangoDisparo));
+                        reloj.restart();
+                    }
+                    
                 break;
                 case sf::Keyboard::Right: // Arriba
                     cabeza.setTextureRect(sf::IntRect(2*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));                  
-                    balas.push_back(new Bala(x,y,2,0)); 
+                    if(reloj.getElapsedTime().asSeconds() > 0.3){
+                         balas.push_back(new Bala(x,y,3,0,rangoDisparo));
+                         reloj.restart();
+                    }
                 break;                    
                 default : break;
                 }
@@ -186,13 +214,7 @@ int main()
             if (event.type == sf::Event::KeyReleased)
             {
                 // solu provisional. Falta controlar cuando son dos teclas pulsadas
-                if(upFlag==false || downFlag==false || leftFlag==false || rightFlag==false){
-                    
-                    cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
-                    piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
-                    //Escala por defecto
-                    cabeza.setScale(escalCab,escalCab);             
-                }
+                
                 
                 
                 
@@ -200,7 +222,7 @@ int main()
                 {
                 // Process the up, down, left and right keys
                 case sf::Keyboard::W : // ARRIBA     
-                    upFlag=false; break;
+                    upFlag=false;break;                    
                 case sf::Keyboard::S:  // ABAJO  
                     downFlag=false; break;
                 case sf::Keyboard::A:  // IZDA  
@@ -210,8 +232,16 @@ int main()
                 default : break;
                 
                 }
+                
+            }
+            if(upFlag==false && downFlag==false && leftFlag==false && rightFlag==false){
+                cabeza.setTextureRect(sf::IntRect(0*tamCabeza, 0*tamCabeza, tamCabeza, tamCabeza));
+                piernas.setTextureRect(sf::IntRect(0*tamPiernas, 1*tamPiernas, tamPiernas, tamPiernas));
+                //Escala por defecto
+                cabeza.setScale(escalCab,escalCab);             
             }
         }
+        
 
         // Actalizamos coordenadas
         if (leftFlag) x-=SPRITE_SPEED;
@@ -229,6 +259,7 @@ int main()
         if (y>(int)window.getSize().y) 
             y=window.getSize().y-radioCabeza;
 
+        // actualizo posicion de la bala
         for(int i = 0 ; i<balas.size(); i++){
             if(balas.at(i)){
                 balas.at(i)->actualiza();
@@ -247,6 +278,7 @@ int main()
         cabeza.setPosition(x,y);
         piernas.setPosition(x,y+(ajustePierna)*escalPie); // valor para ajustar cuerpo a cabeza
           
+        // pintamos las balas
         for(int i = 0 ; i<balas.size(); i++){
             if(balas.at(i)){
                 window.draw(*balas.at(i));

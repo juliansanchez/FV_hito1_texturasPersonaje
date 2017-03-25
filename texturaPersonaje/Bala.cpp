@@ -17,12 +17,16 @@
 
 
 
-Bala::Bala(int x,int y,int velx, int vely) {
+Bala::Bala(int x,int y,int velx, int vely, float rangoDisparo) {
+    // posicion de inicio de la bal que coincide con jugador
     posx = x;
-    posy = y; 
+    posy = y;
+    // dirección y velocidad de la bala
     this->velx=velx;
     this->vely=vely;
+    this->rangoDisparo = rangoDisparo;
     destruirBala = false;
+    
     clock.restart();
     
     if(!textura.loadFromFile("resources/bala.png")){
@@ -32,20 +36,21 @@ Bala::Bala(int x,int y,int velx, int vely) {
     
     sprite = sf::Sprite(textura);
     sprite.setTextureRect(sf::IntRect(16, 16, 32, 32));
+    // fijar centroide
+    sprite.setOrigin(16,16); 
     sprite.setScale(0.5,0.5);
 }
 
 Bala::~Bala() {}
 
-void Bala::setPosicion(int x, int y){       }
+void Bala::setPosicion(int x, int y){     }
 void Bala::colisionar(){       }
 
 void Bala::actualiza(){
     posx+=velx;
     posy+=vely;
-    
-        
-    if(clock.getElapsedTime().asSeconds()< 3){
+
+    if(clock.getElapsedTime().asSeconds()< rangoDisparo){
         sprite.setPosition(posx,posy);
     }
     else
