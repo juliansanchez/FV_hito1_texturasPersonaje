@@ -1,8 +1,7 @@
 /*!
  * \file    main.cpp
- * \brief   move a sprite with the keyboard (http://www.lucidarme.me/?p=6127)
- * \author  Philippe Lucidarme
- * Sprite del personaje y animacion: JULIAN SANCHEZ GARCIA 
+ * \brief   Sprite del personaje y animacion
+ * \author  juli
  */
 
 // SFML libraries
